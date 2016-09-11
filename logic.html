@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+</head>
+<body ng-app="ngAdvanced">
+  <div ng-controller="parseController" class="container">
+  	<p class="input-group">
+	  a:<input type="number" ng-model="data.a" 
+	  	class="form-control input-lg"  required placeholder="a">
+	</p>
+
+	<p class="input-group">
+	  b:<input type="number" ng-model="data.b" 
+	  	class="form-control input-lg" required placeholder="b">
+	</p>
+
+	<p class="input-group">
+	  Logic:<input type="text" ng-model="logic" 
+	  	class="form-control input-lg"  required>
+	</p>
+
+	<button type="submit" ng-click="calculate()" 
+	  	class="btn btn-success btn-lg">Calculate</button>
+
+	<h4> Result: <span ng-bind="result"></span></h4>
+
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js">
+  </script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script>
+//http://bahmutov.calepin.co/angularjs-parse-hacks.html
+(function() {
+angular.module('ngAdvanced', [])
+.controller('parseController', 
+    ['$scope', '$parse', function($scope, $parse) {
+
+    $scope.result = "";
+  	var operations = {
+	  add: function (a, b) { return a + b; },
+	  sub: function (a, b) { return a - b; },
+	  mult: function (a, b) { return a * b; },
+	  div: function (a, b) { return a / b; }
+  	};
+
+	$scope.logic = "mult(add(a, b), sub(a, b))";
+	$scope.data = {a: 5, b: 4};
+	
+	$scope.calculate = function(){
+		var parseFn = $parse($scope.logic);
+		$scope.result = parseFn(operations, $scope.data);
+		console.log($scope.result);
+	}
+	$scope.calculate();
+}]);//parseController
+ 
+})();
+</script>
+
+</body>
+</html>
+
+
+
